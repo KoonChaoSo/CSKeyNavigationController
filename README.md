@@ -1,15 +1,13 @@
 # CSKeyNavigationController
-CSKeyNavigationController 用key来导航的NavigationController，用viewcontroller的名字来做导航
+CSKeyNavigationController push ViewController With Key ! You can push easily to other viewcontroller and pop another with key.
 
+# Version
+  V0.1
 
-# 当前阶段
-0.1版本
+# Who is behind?
+- ChaoSo([ChaoSo](https://github.com/KoonChaoSo))
 
-# 奉献者记录
-
-- 苏冠超([ChaoSo](https://github.com/KoonChaoSo))
-
-# 开始使用
+# Get Started
 ## AppDelegate.m
 ```objective-c
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
@@ -24,3 +22,5 @@ CSKeyNavigationController 用key来导航的NavigationController，用viewcontro
     return YES;
 }
 ```
+# License
+MIT License
