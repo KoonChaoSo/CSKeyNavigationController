@@ -1,5 +1,5 @@
 # CSKeyNavigationController
-CSKeyNavigationController 用key来导航的NavigationController
+CSKeyNavigationController 用key来导航的NavigationController，用viewcontroller的名字来做导航
 
 
 # 当前阶段
