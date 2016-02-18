@@ -20,17 +20,17 @@
 }
 
 - (IBAction)popToTwo:(id)sender {
-        [self.giz_navigationController popViewControllerWithKey:@"TwoVC" animated:YES];
+        [self.cs_navigationController popViewControllerWithKey:@"TwoVC" animated:YES];
 }
 
 
 - (IBAction)popBtnClicked {
-    [self.giz_navigationController popViewControllerWithKey:@"OneVC" animated:YES];
+    [self.cs_navigationController popViewControllerWithKey:@"OneVC" animated:YES];
 }
 
 - (IBAction)popToRootBtnClicked {
     
-    [self.giz_navigationController popToRootViewControllerAnimated:YES];
+    [self.cs_navigationController popToRootViewControllerAnimated:YES];
 }
 
 @end

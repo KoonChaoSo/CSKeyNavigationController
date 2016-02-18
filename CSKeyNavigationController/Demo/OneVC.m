@@ -23,7 +23,7 @@
     
     TwoVC *childVC = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"TwoVC"];
     
-    [self.giz_navigationController pushViewController:childVC animated:YES];
+    [self.cs_navigationController pushViewController:childVC animated:YES];
 }
 
 @end

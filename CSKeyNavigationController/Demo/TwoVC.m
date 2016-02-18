@@ -24,7 +24,7 @@
 - (IBAction)pushBtnClicked {
     
     UIViewController *childVC = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"ThreeVC"];
-    [self.giz_navigationController pushViewController:childVC animated:YES];
+    [self.cs_navigationController pushViewController:childVC animated:YES];
 }
 
 @end

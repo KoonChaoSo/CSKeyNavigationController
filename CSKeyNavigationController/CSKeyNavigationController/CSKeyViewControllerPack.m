@@ -9,38 +9,6 @@
 #import "CSKeyViewControllerPack.h"
 
 @implementation CSKeyViewControllerPack
-+ (CSKeyViewControllerPack *)getInstant
-{
-    static CSKeyViewControllerPack *sharedInstance = nil;
-    static dispatch_once_t predicate;
-    dispatch_once(&predicate, ^{
-        sharedInstance = [[self alloc] init];
-    });
-    return sharedInstance;
-}
-
-
-NSString *descriptionForObject(NSObject *object, id locale, NSUInteger indent)
-{
-    NSString *objectString;
-    if ([object isKindOfClass:[NSString class]])
-    {
-        objectString = (NSString *)object;
-    }
-    else if ([object respondsToSelector:@selector(descriptionWithLocale:indent:)])
-    {
-        objectString = [(NSDictionary *)object descriptionWithLocale:locale indent:indent];
-    }
-    else if ([object respondsToSelector:@selector(descriptionWithLocale:)])
-    {
-        objectString = [(NSSet *)object descriptionWithLocale:locale];
-    }
-    else
-    {
-        objectString = [object description];
-    }
-    return objectString;
-}
 
 
 - (id)init
@@ -53,16 +21,10 @@ NSString *descriptionForObject(NSObject *object, id locale, NSUInteger indent)
     self = [super init];
     if (self != nil)
     {
-        self.viewControllerDic = [[NSMutableDictionary alloc] initWithCapacity:capacity];
-        self.viewControllersList = [[NSMutableArray alloc] initWithCapacity:capacity];
+        self.packDictionary = [[NSMutableDictionary alloc] initWithCapacity:capacity];
+        self.packList = [[NSMutableArray alloc] initWithCapacity:capacity];
     }
     return self;
-}
-
-- (void)dealloc
-{
-    _viewControllerDic = nil;
-    _viewControllersList = nil;
 }
 
 - (id)copy
@@ -70,64 +32,118 @@ NSString *descriptionForObject(NSObject *object, id locale, NSUInteger indent)
     return [self mutableCopy];
 }
 
+- (void)dealloc
+{
+    _packDictionary = nil;
+    _packList = nil;
+}
+
+#pragma mark - Single Instance
++ (CSKeyViewControllerPack *)getInstant
+{
+    static CSKeyViewControllerPack *sharedInstance = nil;
+    static dispatch_once_t predicate;
+    dispatch_once(&predicate, ^{
+        sharedInstance = [[self alloc] init];
+    });
+    return sharedInstance;
+}
+
+
+
+#pragma mark - Function
+
 - (void)setObject:(id)anObject forKey:(id)aKey
 {
-    if (![self.viewControllerDic objectForKey:aKey])
+    if (![self.packDictionary objectForKey:aKey])
     {
-        [self.viewControllersList addObject:aKey];
+        [self.packList addObject:aKey];
     }
-    [self.viewControllerDic setObject:anObject forKey:aKey];
+    [self.packDictionary setObject:anObject forKey:aKey];
 }
 
 - (void)removeObjectForKey:(id)aKey
 {
-    [self.viewControllerDic removeObjectForKey:aKey];
-    [self.viewControllersList removeObject:aKey];
+    [self.packDictionary removeObjectForKey:aKey];
+    [self.packList removeObject:aKey];
 }
 
 - (NSUInteger)count
 {
-    return [self.viewControllerDic count];
+    return [self.packDictionary count];
 }
 
 - (id)objectForKey:(id)aKey
 {
-    return [self.viewControllerDic objectForKey:aKey];
+    return [self.packDictionary objectForKey:aKey];
 }
 
 - (NSEnumerator *)keyEnumerator
 {
-    return [self.viewControllersList objectEnumerator];
+    return [self.packList objectEnumerator];
 }
 
 - (NSEnumerator *)reverseKeyEnumerator
 {
-    return [self.viewControllersList reverseObjectEnumerator];
+    return [self.packList reverseObjectEnumerator];
 }
 
 - (void)addObject:(id)anObject forKey:(id)aKey
 {
-    if ([self.viewControllerDic objectForKey:aKey])
+    if ([self.packDictionary objectForKey:aKey])
     {
         [self removeObjectForKey:aKey];
     }
-    [self.viewControllersList addObject:aKey];
-    [self.viewControllerDic setObject:anObject forKey:aKey];
+    [self.packList addObject:aKey];
+    [self.packDictionary setObject:anObject forKey:aKey];
 }
 
 - (void)insertObject:(id)anObject forKey:(id)aKey atIndex:(NSUInteger)anIndex
 {
-    if ([self.viewControllerDic objectForKey:aKey])
+    if ([self.packDictionary objectForKey:aKey])
     {
         [self removeObjectForKey:aKey];
     }
-    [self.viewControllersList insertObject:aKey atIndex:anIndex];
-    [self.viewControllerDic setObject:anObject forKey:aKey];
+    [self.packList insertObject:aKey atIndex:anIndex];
+    [self.packDictionary setObject:anObject forKey:aKey];
 }
 
 - (id)keyAtIndex:(NSUInteger)anIndex
 {
-    return [self.viewControllersList objectAtIndex:anIndex];
+    return [self.packList objectAtIndex:anIndex];
+}
+
+
+#pragma mark - Log
+/**
+ *  Description
+ *
+ */
+- (NSString *)descriptionWithObject:(id)object
+                             locale:(id)locale
+                             indent:(NSUInteger)indent
+{
+    {
+        NSString *objectString;
+        if ([object isKindOfClass:[NSString class]])
+        {
+            objectString = (NSString *)object;
+        }
+        else if ([object respondsToSelector:@selector(descriptionWithLocale:indent:)])
+        {
+            objectString = [(NSDictionary *)object descriptionWithLocale:locale indent:indent];
+        }
+        else if ([object respondsToSelector:@selector(descriptionWithLocale:)])
+        {
+            objectString = [(NSSet *)object descriptionWithLocale:locale];
+        }
+        else
+        {
+            objectString = [object description];
+        }
+        return objectString;
+    }
+    
 }
 
 - (NSString *)descriptionWithLocale:(id)locale indent:(NSUInteger)level
@@ -141,12 +157,13 @@ NSString *descriptionForObject(NSObject *object, id locale, NSUInteger indent)
     
     NSMutableString *description = [NSMutableString string];
     [description appendFormat:@"%@{\n", indentString];
-    for (NSObject *key in self.viewControllersList)
+    for (NSObject *key in self.packList)
     {
+
         [description appendFormat:@"%@    %@ = %@;\n",
          indentString,
-         descriptionForObject(key, locale, level),
-         descriptionForObject([self objectForKey:key], locale, level)];
+         [self descriptionWithObject:key locale:locale indent:level],
+         [self descriptionWithObject:[self objectForKey:key] locale:locale indent:level]];
     }
     [description appendFormat:@"%@}\n", indentString];
     return description;
